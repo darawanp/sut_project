@@ -8,11 +8,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ล็อกอิน</title>
-
+    <title>Login</title>
+    
     <!-- Favicons -->
     <link href="images/RMUTI.png" rel="icon">
-    <link href="images/RMUTI2.png" rel="">
+    
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,12 +26,14 @@
 <body>
     <div class="box">
 		<form class="login-form" action="check.php" method="post">
-			<center><img src="assets/img/logo_login.png" width="300px" height="200px" alt=""></center>
+			<img src="assets/img/logo.png" width="300px" height="200px" alt="">
 			<input type="text" name="username" placeholder="Username" required>
 			<input type="password" name="password" placeholder="Password" required>
 			<input type="submit" name="Login" value="Login">
+            
 			
 			</button>
+            
 		</form>
 		
 	</div>
