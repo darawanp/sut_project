@@ -56,11 +56,11 @@
         <section class="section">
             <div class="card">
                 <div class="card-site d-flex align-items-center">
-                    <h5 class="card-title">ข้อมูลบุคลากรทั้งหมด</h5>
+                    <h5 class="card-title">รายชื่อกรรมการคุมสอบ</h5>
                     <a href="peopleCreate.php" class="ms-auto">
                         <button class="btn btn-primary btn-round me-2">
                             <i class="card-icon bi bi-person-fill-up me-1"></i>
-                            เพิ่มบุคลากร
+                            รายชื่อกรรมการคุมสอบ
                         </button>
                     </a>
                 </div>
