@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Login</title>
+    <title>ล็อกอิน</title>
 
     <!-- Favicons -->
     <link href="images/RMUTI.png" rel="icon">
