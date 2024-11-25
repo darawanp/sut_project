@@ -62,47 +62,67 @@ $result_exam_types = $conn->query($sql_exam_types);
                     </div>
 
                     <div class="card-body">
-                        <form name="examScheduleAdd" action="examInsertMidterm.php" method="POST">
-                            <div class="form">
-                                <div class="row mb-4 g-3">
-                                    <label class="col-md-4 col-lg-3 col-form-label">เลือกวันสอบ</label>
-                                    <div class="col-md-8 col-lg-9 mb-2">
-                                        <input name="exam_date" type="date" class="form-control" placeholder="เลือกวันสอบ">
-                                    </div>
-                                </div>
+    <form name="examScheduleAdd" action="examInsertMidterm.php" method="POST">
+        <div class="form">
+            <!-- เลือกวันสอบ -->
+            <div class="row mb-4 g-3">
+                <label class="col-md-4 col-lg-3 col-form-label">เลือกวันสอบ</label>
+                <div class="col-md-8 col-lg-9 mb-2">
+                    <input name="exam_date" type="date" class="form-control" placeholder="เลือกวันสอบ">
+                </div>
+            </div>
 
-                                <div class="row mb-4 g-3">
-                                    <label class="col-md-4 col-lg-3 col-form-label">ช่วงเวลา</label>
-                                    <div class="col-md-8 col-lg-9 mb-2">
-                                        <select name="exam_time" class="form-select">
-                                            <option selected>เลือกเวลา</option>
-                                            <option value="9:00-11:00">9:00 - 11:00</option>
-                                            <option value="13:00-16:00">13:00 - 16:00</option>
-                                            <option value="16:00-19:30">16:00 - 19:30</option>
-                                        </select>
-                                    </div>
-                                </div>
+            <!-- ช่วงเวลา (Checkbox) -->
+            <div class="row mb-4 g-3">
+                <label class="col-md-4 col-lg-3 col-form-label">ช่วงเวลา</label>
+                <div class="col-md-8 col-lg-9">
+                    <div>
+                        <input type="checkbox" name="exam_time[]" value="9:00-11:00"> 9:00 - 11:00
+                    </div>
+                    <div>
+                        <input type="checkbox" name="exam_time[]" value="13:00-16:00"> 13:00 - 16:00
+                    </div>
+                    <div>
+                        <input type="checkbox" name="exam_time[]" value="16:00-19:30"> 16:00 - 19:30
+                    </div>
+                    <!-- เพิ่มช่วงเวลาใหม่ -->
+                    <div class="mt-3">
+                        <label>เพิ่มช่วงเวลาใหม่:</label>
+                        <div class="d-flex">
+                            <input type="time" id="start_time" class="form-control me-2" placeholder="เวลาเริ่มต้น">
+                            <input type="time" id="end_time" class="form-control me-2" placeholder="เวลาสิ้นสุด">
+                            <button type="button" id="add_time" class="btn btn-primary">เพิ่ม</button>
+                        </div>
+                        <div id="new_time_list" class="mt-2"></div>
+                    </div>
+                </div>
+            </div>
+</div>
 
-                                <div class="row mb-4 g-3">
-                                    <label class="col-md-4 col-lg-3 col-form-label">จำนวนคนคุมสอบ</label>
-                                    <div class="col-md-8 col-lg-9 mb-2">
-                                        <input name="num_proctors" type="number" class="form-control" placeholder="จำนวนคนคุมสอบ">
-                                    </div>
-                                </div>
 
-                                <div class="row mb-4 g-3" style="display: none;">
-                                    <label class="col-md-4 col-lg-3 col-form-label">ประเภทการสอบ</label>
-                                    <div class="col-md-8 col-lg-9 mb-2">
-                                        <select name="exam_type" class="form-select">
-                                            <!-- <?php while ($row = $result_exam_types->fetch_assoc()): ?> ตรวจสอบว่าไอดีที่ดึงมามีค่าเป็น 1 = สอบกลางภาค ถ้าใช้ให้ทำการแสดงตัวเลือกออกมา  -->
-                                                <option value="<?= $row['exam_type_id'] ?>" 
-                                                    <?= $row['exam_types_name'] == 'สอบกลางภาค' ? 'selected' : '' ?>>
-                                                    <?= $row['exam_types_name'] ?>
-                                                </option>
-                                            <?php endwhile; ?>
-                                        </select>
-                                    </div>
-                                </div>
+<!-- จำนวนคนคุมสอบ -->
+            <div class="row mb-4 g-3">
+                <label class="col-md-4 col-lg-3 col-form-label">จำนวนคนคุมสอบ</label>
+                <div class="col-md-8 col-lg-9 mb-2">
+                    <input name="num_proctors" type="number" class="form-control" placeholder="จำนวนคนคุมสอบ">
+                </div>
+            </div>
+
+                                 <!-- ประเภทการสอบ -->
+            <div class="row mb-4 g-3" style="display: none;">
+                <label class="col-md-4 col-lg-3 col-form-label">ประเภทการสอบ</label>
+                <div class="col-md-8 col-lg-9 mb-2">
+                    <select name="exam_type" class="form-select">
+                        <?php while ($row = $result_exam_types->fetch_assoc()): ?>
+                            <option value="<?= $row['exam_type_id'] ?>" 
+                                <?= $row['exam_types_name'] == 'สอบกลางภาค' ? 'selected' : '' ?>>
+                                <?= $row['exam_types_name'] ?>
+                            </option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+            </div>
+
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success">บันทึก</button>
                                     <button type="reset" class="btn btn-warning">ล้างข้อมูล</button>
@@ -152,9 +172,31 @@ $result_exam_types = $conn->query($sql_exam_types);
                     window.location.href = "examMidterm.php";
                 });
             }
+            
         <?php endif; ?>
     </script>
     <?php include("footer_admin.php") ?>
+    <script>
+    document.getElementById('add_time').addEventListener('click', function () {
+        const startTime = document.getElementById('start_time').value;
+        const endTime = document.getElementById('end_time').value;
+        const timeList = document.getElementById('new_time_list');
+
+        if (startTime && endTime) {
+            // สร้างช่วงเวลาใหม่
+            const timeRange = `${startTime}-${endTime}`;
+            const checkbox = document.createElement('div');
+            checkbox.innerHTML = `<input type="checkbox" name="exam_time[]" value="${timeRange}" checked> ${timeRange}`;
+            timeList.appendChild(checkbox);
+
+            // ล้างค่าใน input
+            document.getElementById('start_time').value = '';
+            document.getElementById('end_time').value = '';
+        } else {
+            alert('กรุณาเลือกทั้งเวลาเริ่มต้นและเวลาสิ้นสุด');
+        }
+    });
+</script>
 </body>
 
 </html>

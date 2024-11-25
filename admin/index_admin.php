@@ -204,9 +204,6 @@
                 <?php
                 $sql2 = "SELECT * FROM activity WHERE dates_tr='" . $date . "'";
                 $query2 = mysqli_query($conn, $sql2);
-
-
-
                   echo '<div class="ps-3">
                       <h6>0</h6>
                     </div>';
