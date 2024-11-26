@@ -76,7 +76,7 @@ $menu=basename($_SERVER['PHP_SELF']);
                     </a>
                 </li>
                 <li>
-                    <a href="mission.php">
+                    <a href="addname.php">
                         <i class="bi bi-circle-fill"></i><span>รายชื่อกรรมการคุมสอบ</span>
                     </a>
                 </li>
