@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>บุคลากร - Admin Management</title>
+    <title>รายชื่อกรรมการคุมสอบ</title>
 
     <!-- Favicons -->
     <link href="../assets/img/RMUTI.png" rel="icon">
