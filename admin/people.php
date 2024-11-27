@@ -44,7 +44,7 @@
     <main id="main" class="main" style="margin-top: 90px;">
 
         <div class="pagetitle text-center">
-            <h2>บุคลากร</h2>
+            <h2>รายชื่อกรรมการคุมสอบ</h2>
             <nav class="d-flex justify-content-center">
                 <ol class="breadcrumb mt-3">
                     <li class="breadcrumb-item"><a href="index_admin.php">หน้าแรก</a></li>
@@ -60,7 +60,7 @@
                     <a href="peopleCreate.php" class="ms-auto">
                         <button class="btn btn-primary btn-round me-2">
                             <i class="card-icon bi bi-person-fill-up me-1"></i>
-                            รายชื่อกรรมการคุมสอบ
+                            เพิ่มรายชื่อกรรมการคุมสอบ
                         </button>
                     </a>
                 </div>

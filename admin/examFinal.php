@@ -45,11 +45,12 @@ $result_exam_types = $conn->query($sql_exam_types);
 
     <main id="main" class="main">
         <div class="pagetitle text-center">
-            <h2>จัดการข้อมูลวันคุมสอบ ประจำภาค</h2>
+            <h2>เพิ่มข้อมูลวันคุมสอบประจำภาค</h2>
             <nav class="d-flex justify-content-center">
                 <ol class="breadcrumb mt-3">
                     <li class="breadcrumb-item"><a href="index_admin.php">หน้าแรก</a></li>
-                    <li class="breadcrumb-item"><a href="examMidterm.php">จัดการข้อมูลวันคุมสอบ ประจำภาค</a></li>
+                    <li class="breadcrumb-item"><a href="examSchedule.php">บันทึกข้อมูลการคุมสอบ</a></li>
+                    <li class="breadcrumb-item active">เพิ่มข้อมูลวันคุมสอบประจำภาค</a></li>
                 </ol>
             </nav>
         </div>
@@ -71,22 +72,21 @@ $result_exam_types = $conn->query($sql_exam_types);
                                     </div>
                                 </div>
 
-                                <div class="row mb-4 g-3">
-                                    <label class="col-md-4 col-lg-3 col-form-label">ช่วงเวลา</label>
-                                    <div class="col-md-8 col-lg-9 mb-2">
-                                        <select name="exam_time" class="form-select">
-                                            <option selected>เลือกเวลา</option>
-                                            <option value="9:00-12:00">9:00 - 12:00</option>
-                                            <option value="13:00-16:00">13:00 - 16:00</option>
-                                            <option value="16:00-19:30">16:00 - 19:30</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-4 g-3">
-                                    <label class="col-md-4 col-lg-3 col-form-label">จำนวนคนคุมสอบ</label>
-                                    <div class="col-md-8 col-lg-9 mb-2">
-                                        <input name="num_proctors" type="number" class="form-control" placeholder="จำนวนคนคุมสอบ">
+                                <div id="examTimeContainer">
+                                    <div class="row mb-4 g-3 exam-time-row">
+                                        <label class="col-md-4 col-lg-3 col-form-label">ช่วงเวลา</label>
+                                        <div class="col-md-4 col-lg-2 mb-2"> <!-- เปลี่ยนจาก col-md-3 เป็น col-md-4 หรือ col-lg-4 -->
+                                            <input style="text-align: center;" name="exam_start_time[]" type="time" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-4 col-lg-2 mb-2"> <!-- เปลี่ยนจาก col-md-3 เป็น col-md-4 หรือ col-lg-4 -->
+                                            <input style="text-align: center;" name="exam_end_time[]" type="time" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-4 col-lg-4 mb-2"> <!-- เพิ่มคอลัมน์สำหรับจำนวนคนคุมสอบ -->
+                                            <input name="num_proctors[]" type="number" class="form-control" placeholder="จำนวนคนคุมสอบ" required>
+                                        </div>
+                                        <div class="col-md-2 col-lg-1 mb-2">
+                                            <button type="button" class="bi bi-plus-circle-fill btn btn-success btn-add-time"></button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -95,14 +95,14 @@ $result_exam_types = $conn->query($sql_exam_types);
                                     <div class="col-md-8 col-lg-9 mb-2">
                                         <select name="exam_type" class="form-select">
                                             <?php while ($row = $result_exam_types->fetch_assoc()): ?>
-                                                <option value="<?= $row['exam_type_id'] ?>"
-                                                    <?= $row['exam_types_name'] == 'สอบประจำภาค' ? 'selected' : '' ?>>
+                                                <option value="<?= $row['exam_type_id'] ?>" <?= $row['exam_type_id'] == 2 ? 'selected' : '' ?>>
                                                     <?= $row['exam_types_name'] ?>
                                                 </option>
                                             <?php endwhile; ?>
                                         </select>
                                     </div>
                                 </div>
+
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success">บันทึก</button>
                                     <button type="reset" class="btn btn-warning">ล้างข้อมูล</button>
@@ -118,6 +118,37 @@ $result_exam_types = $conn->query($sql_exam_types);
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.1/dist/sweetalert2.all.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('examTimeContainer');
+
+            container.addEventListener('click', (e) => {
+                if (e.target.classList.contains('btn-add-time')) {
+                    const newRow = document.createElement('div');
+                    newRow.classList.add('row', 'mb-4', 'g-3', 'exam-time-row');
+
+                    newRow.innerHTML = `
+                        <label class="col-md-4 col-lg-3 col-form-label"></label>
+                        <div class="col-md-3 col-lg-2 mb-2">
+                            <input style="text-align: center;" name="exam_start_time[]" type="time" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 col-lg-2 mb-2">
+                            <input style="text-align: center;" name="exam_end_time[]" type="time" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 col-lg-4 mb-2"> <!-- เพิ่มคอลัมน์สำหรับจำนวนคนคุมสอบ -->
+                            <input name="num_proctors[]" type="number" class="form-control" placeholder="จำนวนคนคุมสอบ" required>
+                        </div>
+                        <div class="col-md-2 col-lg-1 mb-2">
+                            <button type="button" class="bi bi-x-circle-fill btn btn-danger btn-remove-time"></button>
+                        </div>
+                    `;
+                    container.appendChild(newRow);
+                } else if (e.target.classList.contains('btn-remove-time')) {
+                    const row = e.target.closest('.exam-time-row');
+                    row.remove();
+                }
+            });
+        });
+
         <?php if (isset($_GET['status'])): ?>
             let status = "<?php echo $_GET['status']; ?>";
             if (status === 'success') {
@@ -125,7 +156,7 @@ $result_exam_types = $conn->query($sql_exam_types);
                     icon: 'success',
                     title: 'บันทึกข้อมูลสำเร็จ',
                     text: 'ข้อมูลวันคุมสอบถูกบันทึกเรียบร้อยแล้ว',
-                    timer: 1000, // แสดง 3 วินาที
+                    timer: 1000, // แสดง 1 วินาที
                     showConfirmButton: false, // ซ่อนปุ่ม "ตกลง"
                 }).then(() => {
                     // หลังจากแสดงข้อความเสร็จ ให้ไปที่หน้า examSchedule.php

@@ -19,15 +19,17 @@ if (isset($_GET['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $exam_date = $_POST['exam_date'];
-    $exam_time = $_POST['exam_time'];
+    $exam_start_times = $_POST['exam_start_times'];
+    $exam_end_times = $_POST['exam_end_times'];    
     $num_proctors = $_POST['num_proctors'];
     $exam_type = $_POST['exam_type'];
 
     // ตรวจสอบข้อมูลก่อนการอัพเดต
-    if ($exam_date && $exam_time && $num_proctors && $exam_type) {
-        $sql_update = "UPDATE exam_schedule SET exam_date = ?, exam_time = ?, num_proctors = ?, exam_type_id = ? WHERE exam_id = ?";
+    if ($exam_date && $exam_start_times && $exam_end_times && $num_proctors && $exam_type) {
+        // อัพเดตข้อมูล
+        $sql_update = "UPDATE exam_schedule SET exam_date = ?, exam_start_times = ?, exam_end_times = ?, num_proctors = ?, exam_type_id = ? WHERE exam_id = ?";
         $stmt_update = $conn->prepare($sql_update);
-        $stmt_update->bind_param("ssiii", $exam_date, $exam_time, $num_proctors, $exam_type, $exam_id);
+        $stmt_update->bind_param("sssiii", $exam_date, $exam_start_times, $exam_end_times, $num_proctors, $exam_type, $exam_id);
 
         if ($stmt_update->execute()) {
             echo "<script>
@@ -70,12 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แก้ไขข้อมูลวันคุมสอบ - Admin Management</title>
-
     <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -101,12 +101,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <main id="main" class="main">
         <div class="pagetitle text-center">
-            <h2>แก้ไขข้อมูลวันคุมสอบ</h2>
+            <h2>แก้ไขข้อมูลวันคุมสอบประจำภาค</h2>
             <nav class="d-flex justify-content-center">
                 <ol class="breadcrumb mt-3">
                     <li class="breadcrumb-item"><a href="index_admin.php">หน้าแรก</a></li>
-                    <li class="breadcrumb-item"><a href="examMidterm.php">จัดการข้อมูลวันคุมสอบ</a></li>
-                    <li class="breadcrumb-item active">แก้ไขข้อมูลวันคุมสอบ</li>
+                    <li class="breadcrumb-item"><a href="examSchedule.php">บันทึกข้อมูลการคุมสอบ</a></li>
+                    <li class="breadcrumb-item active">แก้ไขข้อมูลวันคุมสอบประจำภาค</li>
                 </ol>
             </nav>
         </div>
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="col-12">
                 <div class="card">
                     <div class="card-site">
-                        <h5 class="card-title text-center">แก้ไขข้อมูลวันคุมสอบ</h5>
+                        <h5 class="card-title text-center">แก้ไขข้อมูลวันคุมสอบประจำภาค</h5>
                     </div>
 
                     <div class="card-body">
@@ -128,22 +128,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
                                 </div>
 
-                                <div class="row mb-4 g-3">
+                                <div class="row mb-4 g-3 exam-time-row">
                                     <label class="col-md-4 col-lg-3 col-form-label">ช่วงเวลา</label>
-                                    <div class="col-md-8 col-lg-9 mb-2">
-                                        <select name="exam_time" class="form-select" required>
-                                            <option value="9:00-12:00" <?php echo $row['exam_time'] == '9:00-12:00' ? 'selected' : ''; ?>>9:00 - 12:00</option>
-                                            <option value="13:00-16:00" <?php echo $row['exam_time'] == '13:00-16:00' ? 'selected' : ''; ?>>13:00 - 16:00</option>
-                                            <option value="16:00-19:30" <?php echo $row['exam_time'] == '16:00-19:30' ? 'selected' : ''; ?>>16:00 - 19:30</option>
-                                        </select>
+                                    <div class="col-md-8 col-lg-2 mb-2">
+                                        <input style="text-align: center;" name="exam_start_times" type="time" class="form-control" value="<?php echo date('H:i', strtotime($row['exam_start_times'])); ?>" required>
                                     </div>
-                                </div>
-
-                                <div class="row mb-4 g-3">
-                                    <label class="col-md-4 col-lg-3 col-form-label">จำนวนคนคุมสอบ</label>
-                                    <div class="col-md-8 col-lg-9 mb-2">
-                                        <input name="num_proctors" type="number" class="form-control" value="<?php echo $row['num_proctors']; ?>" required>
+                                    <div class="col-md-8 col-lg-2 mb-2">
+                                        <input style="text-align: center;" name="exam_end_times" type="time" class="form-control" value="<?php echo date('H:i', strtotime($row['exam_end_times'])); ?>" required>
                                     </div>
+                                    <div class="col-md-8 col-lg-5 mb-2">
+                                    <input name="num_proctors" type="number" class="form-control" value="<?php echo $row['num_proctors']; ?>" required>
                                 </div>
 
                                 <div class="row mb-4 g-3" style="display: none;">
@@ -173,5 +167,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <?php include("footer_admin.php") ?>
 </body>
-
 </html>
